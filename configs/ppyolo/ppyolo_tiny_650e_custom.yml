@@ -1,0 +1,33 @@
+_BASE_: [
+  '../datasets/coco_detection.yml',
+  '../runtime.yml',
+  './_base_/ppyolo_tiny.yml',
+  './_base_/optimizer_650e.yml',
+  './_base_/ppyolo_tiny_reader.yml',
+]
+
+snapshot_epoch: 1
+weights: ../output/ppyolo_tiny_650e_alum/model_final
+
+metric: COCO
+num_classes: 4
+
+TrainDataset:
+  !COCODataSet
+    image_dir: images
+    anno_path: annotations/train.json
+    dataset_dir: dataset/alum/
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'is_crowd']
+
+EvalDataset:
+  !COCODataSet
+    image_dir: images
+    anno_path: annotations/valid.json
+    dataset_dir: dataset/alum/
+
+TestDataset:
+  !ImageFolder
+    anno_path: annotations/valid.json # also support txt (like VOC's label_list.txt)
+    dataset_dir: dataset/alum/ # if set, anno_path will be 'dataset_dir/anno_path'
+
+bufsize: 3
