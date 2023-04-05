@@ -23,11 +23,11 @@ QuantAware:
   - depthwise_conv2d
 
 TrainConfig:
-  train_iter: 5000
-  eval_iter: 200
+  train_iter: 10
+  eval_iter: 10
   learning_rate:  
     type: CosineAnnealingDecay
-    learning_rate: 0.00001
+    learning_rate: 0.000003
     T_max: 6000
   optimizer_builder:
     optimizer: 
