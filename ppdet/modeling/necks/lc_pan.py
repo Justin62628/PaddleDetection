@@ -46,7 +46,7 @@ class LCPAN(nn.Layer):
                  kernel_size=5,
                  num_features=3,
                  use_depthwise=True,
-                 act='hard_swish',
+                 act='relu',
                  spatial_scales=[0.125, 0.0625, 0.03125]):
         super(LCPAN, self).__init__()
         self.conv_t = Channel_T(in_channels, out_channels, act=act)
@@ -77,6 +77,7 @@ class LCPAN(nn.Layer):
             self.spatial_scales.append(self.spatial_scales[-1] / 2)
 
         # build top-down blocks
+        # self.upsample = nn.Conv2D(in_channels=in_channels[0], out_channels=in_channels[0], kernel_size=2, stride=2, padding=0)
         self.upsample = nn.Upsample(scale_factor=2, mode='nearest')
         self.top_down_blocks = nn.LayerList()
         for idx in range(len(in_channels) - 1, 0, -1):
@@ -126,32 +127,41 @@ class LCPAN(nn.Layer):
         inputs = self.conv_t(inputs)
 
         # top-down path
-        inner_outs = [inputs[-1]]
-        for idx in range(len(self.in_channels) - 1, 0, -1):
-            feat_heigh = inner_outs[0]
-            feat_low = inputs[idx - 1]
-
-            upsample_feat = self.upsample(feat_heigh)
-
-            inner_out = self.top_down_blocks[len(self.in_channels) - 1 - idx](
-                paddle.concat([upsample_feat, feat_low], 1))
-            inner_outs.insert(0, inner_out)
+        # inner_outs = [inputs[-1]]
+        # for idx in range(len(self.in_channels) - 1, 0, -1):
+        #     feat_heigh = inner_outs[0]
+        #     feat_low = inputs[idx - 1]
+        #
+        #     upsample_feat = self.upsample(feat_heigh)
+        #
+        #     inner_out = self.top_down_blocks[len(self.in_channels) - 1 - idx](
+        #         paddle.concat([upsample_feat, feat_low], 1))
+        #     inner_outs.insert(0, inner_out)
 
         # bottom-up path
-        outs = [inner_outs[0]]
-        for idx in range(len(self.in_channels) - 1):
-            feat_low = outs[-1]
-            feat_height = inner_outs[idx + 1]
-            downsample_feat = self.downsamples[idx](feat_low)
-            out = self.bottom_up_blocks[idx](paddle.concat(
-                [downsample_feat, feat_height], 1))
-            outs.append(out)
+        outs = [inputs[0]]
+        for idx in range(1):  # len(self.in_channels) - 1) === 3 or 4
+            # feat_low = outs[-1]
+            # feat_height = inputs[idx + 1]
+            # downsample_feat = self.downsamples[idx](feat_low)
+            # concat = paddle.concat([downsample_feat, feat_height], 1)
+            # out = self.bottom_up_blocks[idx](concat)
+            # outs.append(out)
+            outs.append(inputs[idx + 1])
+        # TODO: check manually split graph
+        feat_low = outs[-1]
+        feat_height = inputs[-1]
+        downsample_feat = self.downsamples[-1](feat_low)
+        concat = paddle.concat([downsample_feat, feat_height], 1)
+        out = self.bottom_up_blocks[-1](concat)
+        outs.append(out)
+        # outs.append(inputs[idx + 1])
 
         top_features = None
-        if self.num_features == 4:
-            top_features = self.first_top_conv(inputs[-1])
-            top_features = top_features + self.second_top_conv(outs[-1])
-            outs.append(top_features)
+        # if self.num_features == 4:
+        #     top_features = self.first_top_conv(inputs[-1])
+        #     top_features = top_features + self.second_top_conv(outs[-1])
+        #     outs.append(top_features)
 
         return tuple(outs)
 

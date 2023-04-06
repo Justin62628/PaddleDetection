@@ -51,7 +51,7 @@ class PicoSE(nn.Layer):
         normal_(self.fc.weight, std=0.001)
 
     def forward(self, feat, avg_feat):
-        weight = F.sigmoid(self.fc(avg_feat))
+        weight = F.relu6(self.fc(avg_feat))
         out = self.conv(feat * weight)
         return out
 
@@ -154,7 +154,7 @@ class PicoFeat(nn.Layer):
         if self.act == "leaky_relu":
             x = F.leaky_relu(x)
         elif self.act == "hard_swish":
-            x = F.hardswish(x)
+            x = F.relu(x)
         elif self.act == "relu6":
             x = F.relu6(x)
         return x
@@ -316,7 +316,7 @@ class PicoHead(OTAVFLHead):
 
             if self.dgqp_module:
                 quality_score = self.dgqp_module(bbox_pred)
-                cls_score = F.sigmoid(cls_score) * quality_score
+                cls_score = F.relu6(cls_score) * quality_score
 
             cls_logits_list.append(cls_score)
             bboxes_reg_list.append(bbox_pred)
@@ -343,19 +343,19 @@ class PicoHead(OTAVFLHead):
 
             if self.dgqp_module:
                 quality_score = self.dgqp_module(bbox_pred)
-                cls_score = F.sigmoid(cls_score) * quality_score
+                cls_score = F.relu6(cls_score) * quality_score
 
             if not export_post_process:
                 # Now only supports batch size = 1 in deploy
                 # TODO(ygh): support batch size > 1
-                cls_score_out = F.sigmoid(cls_score).reshape(
+                cls_score_out = F.relu6(cls_score).reshape(
                     [1, self.cls_out_channels, -1]).transpose([0, 2, 1])
                 bbox_pred = bbox_pred.reshape([1, (self.reg_max + 1) * 4,
                                                -1]).transpose([0, 2, 1])
             else:
                 _, _, h, w = fpn_feat.shape
                 l = h * w
-                cls_score_out = F.sigmoid(
+                cls_score_out = F.relu6(
                     cls_score.reshape([-1, self.cls_out_channels, l]))
                 bbox_pred = bbox_pred.transpose([0, 2, 3, 1])
                 bbox_pred = self.distribution_project(bbox_pred)
@@ -453,7 +453,7 @@ class PicoHeadV2(GFLHead):
                  nms=None,
                  nms_pre=1000,
                  cell_offset=0,
-                 act='hard_swish',
+                 act='relu',
                  grid_cell_scale=5.0,
                  eval_size=None):
         super(PicoHeadV2, self).__init__(
@@ -564,8 +564,8 @@ class PicoHeadV2(GFLHead):
 
             # cls prediction and alignment
             if self.use_align_head:
-                cls_prob = F.sigmoid(self.cls_align[i](conv_cls_feat))
-                cls_score = (F.sigmoid(cls_logit) * cls_prob + eps).sqrt()
+                cls_prob = F.relu6(self.cls_align[i](conv_cls_feat))
+                cls_score = (F.relu6(cls_logit) * cls_prob + eps).sqrt()
             else:
                 cls_score = F.sigmoid(cls_logit)
 
@@ -605,8 +605,8 @@ class PicoHeadV2(GFLHead):
 
             # cls prediction and alignment
             if self.use_align_head:
-                cls_prob = F.sigmoid(self.cls_align[i](conv_cls_feat))
-                cls_score = (F.sigmoid(cls_logit) * cls_prob + eps).sqrt()
+                cls_prob = F.relu6(self.cls_align[i](conv_cls_feat))
+                cls_score = (F.relu6(cls_logit) * cls_prob + eps).sqrt()
             else:
                 cls_score = F.sigmoid(cls_logit)
 

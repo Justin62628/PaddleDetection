@@ -255,6 +255,8 @@ class VOCMetric(Metric):
         self.detection_map.reset()
 
     def update(self, inputs, outputs):
+        if 'bbox' not in outputs or 'bbox_num' not in outputs:
+            return
         bbox_np = outputs['bbox'].numpy() if isinstance(
             outputs['bbox'], paddle.Tensor) else outputs['bbox']
         bboxes = bbox_np[:, 2:]

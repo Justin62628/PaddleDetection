@@ -49,7 +49,7 @@ NET_CONFIG = {
         [5, 256, 256, 1, False],
         [5, 256, 256, 1, False],
     ],
-    "blocks6": [[5, 256, 512, 2, True], [5, 512, 512, 1, True]]
+    "blocks6": [[5, 256, 512, 2, False], [5, 512, 512, 1, False]]
 }
 
 
@@ -87,7 +87,7 @@ class ConvBNLayer(nn.Layer):
             weight_attr=ParamAttr(regularizer=L2Decay(0.0)),
             bias_attr=ParamAttr(regularizer=L2Decay(0.0)))
         if act == 'hard_swish':
-            self.act = nn.Hardswish()
+            self.act = nn.ReLU()
         elif act == 'relu6':
             self.act = nn.ReLU6()
 
@@ -149,7 +149,7 @@ class SEModule(nn.Layer):
             kernel_size=1,
             stride=1,
             padding=0)
-        self.hardsigmoid = nn.Hardsigmoid()
+        self.hardsigmoid = nn.LeakyReLU()
 
     def forward(self, x):
         identity = x

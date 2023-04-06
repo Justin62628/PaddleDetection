@@ -105,9 +105,9 @@ class DPModule(nn.Layer):
         x = self.bn1(self.dwconv(x))
         if self.act:
             x = getattr(F, self.act)(x)
-        x = self.bn2(self.pwconv(x))
-        if self.use_act_in_out and self.act:
-            x = getattr(F, self.act)(x)
+        # x = self.bn2(self.pwconv(x))
+        # if self.use_act_in_out and self.act:
+        #     x = getattr(F, self.act)(x)
         return x
 
 
