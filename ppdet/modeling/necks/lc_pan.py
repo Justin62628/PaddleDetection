@@ -139,22 +139,23 @@ class LCPAN(nn.Layer):
         #     inner_outs.insert(0, inner_out)
 
         # bottom-up path
-        outs = [inputs[0]]
-        for idx in range(1):  # len(self.in_channels) - 1) === 3 or 4
-            # feat_low = outs[-1]
-            # feat_height = inputs[idx + 1]
-            # downsample_feat = self.downsamples[idx](feat_low)
-            # concat = paddle.concat([downsample_feat, feat_height], 1)
-            # out = self.bottom_up_blocks[idx](concat)
-            # outs.append(out)
-            outs.append(inputs[idx + 1])
-        # TODO: check manually split graph
-        feat_low = outs[-1]
-        feat_height = inputs[-1]
-        downsample_feat = self.downsamples[-1](feat_low)
-        concat = paddle.concat([downsample_feat, feat_height], 1)
-        out = self.bottom_up_blocks[-1](concat)
-        outs.append(out)
+        # outs = [inputs[0]]
+        # for idx in range(1):  # len(self.in_channels) - 1) === 3 or 4
+        #     # feat_low = outs[-1]
+        #     # feat_height = inputs[idx + 1]
+        #     # downsample_feat = self.downsamples[idx](feat_low)
+        #     # concat = paddle.concat([downsample_feat, feat_height], 1)
+        #     # out = self.bottom_up_blocks[idx](concat)
+        #     # outs.append(out)
+        #     outs.append(inputs[idx + 1])
+        #
+        # below: check manually split graph
+        # feat_low = outs[-1]
+        # feat_height = inputs[-1]
+        # downsample_feat = self.downsamples[-1](feat_low)
+        # concat = paddle.concat([downsample_feat, feat_height], 1)
+        # out = self.bottom_up_blocks[-1](concat)
+        # outs.append(out)
         # outs.append(inputs[idx + 1])
 
         top_features = None
@@ -163,7 +164,8 @@ class LCPAN(nn.Layer):
         #     top_features = top_features + self.second_top_conv(outs[-1])
         #     outs.append(top_features)
 
-        return tuple(outs)
+        # return tuple(outs)
+        return tuple(inputs)
 
     @property
     def out_shape(self):

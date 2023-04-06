@@ -18,16 +18,16 @@ LCPAN:
 #  num_features: 4
   num_features: 3
 
-MobileNet:
-  norm_decay: 0.
-  scale: 1
-  conv_learning_rate: 0.1
-#  extra_block_filters: [[256, 512], [128, 256], [128, 256], [64, 128]]
-#  with_extra_blocks: True
-#  feature_maps: [11, 13, 14, 15, 16, 17]
-#  feature_maps: [11, 13, 14, 15]
-#  feature_maps: [6, 7, 8, 9]
-  feature_maps: [3, 5, 10]
+#MobileNet:
+#  norm_decay: 0.
+#  scale: 1
+#  conv_learning_rate: 0.1
+##  extra_block_filters: [[256, 512], [128, 256], [128, 256], [64, 128]]
+##  with_extra_blocks: True
+##  feature_maps: [11, 13, 14, 15, 16, 17]
+##  feature_maps: [11, 13, 14, 15]
+##  feature_maps: [6, 7, 8, 9]
+#  feature_maps: [3, 5, 10]
 
 #FPN:
 #  out_channel: 96

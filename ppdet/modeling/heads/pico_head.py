@@ -23,6 +23,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
 from paddle.nn.initializer import Normal, Constant
+from paddle.regularizer import L2Decay
 
 from ppdet.modeling.ops import get_static_shape
 from ..initializer import normal_
@@ -259,30 +260,34 @@ class PicoHead(OTAVFLHead):
         for i in range(len(fpn_stride)):
             head_cls = self.add_sublayer(
                 "head_cls" + str(i),
-                nn.Conv2D(
-                    in_channels=self.feat_in_chan,
-                    out_channels=self.cls_out_channels + 4 * (self.reg_max + 1)
-                    if self.conv_feat.share_cls_reg else self.cls_out_channels,
-                    kernel_size=1,
-                    stride=1,
-                    padding=0,
-                    weight_attr=ParamAttr(initializer=Normal(
-                        mean=0., std=0.01)),
-                    bias_attr=ParamAttr(
-                        initializer=Constant(value=bias_init_value))))
+                # nn.Conv2D(
+                #     in_channels=self.feat_in_chan,
+                #     out_channels=self.cls_out_channels + 4 * (self.reg_max + 1)
+                #     if self.conv_feat.share_cls_reg else self.cls_out_channels,
+                #     kernel_size=1,
+                #     stride=1,
+                #     padding=0,
+                #     weight_attr=ParamAttr(initializer=Normal(
+                #         mean=0., std=0.01)),
+                #     bias_attr=ParamAttr(
+                #         initializer=Constant(value=bias_init_value)))
+                NormConvLayer(self.feat_in_chan, self.cls_out_channels + 4 * (self.reg_max + 1), kernel_size=1, padding=0)
+            )
             self.head_cls_list.append(head_cls)
             if not self.conv_feat.share_cls_reg:
                 head_reg = self.add_sublayer(
                     "head_reg" + str(i),
-                    nn.Conv2D(
-                        in_channels=self.feat_in_chan,
-                        out_channels=4 * (self.reg_max + 1),
-                        kernel_size=1,
-                        stride=1,
-                        padding=0,
-                        weight_attr=ParamAttr(initializer=Normal(
-                            mean=0., std=0.01)),
-                        bias_attr=ParamAttr(initializer=Constant(value=0))))
+                    # nn.Conv2D(
+                    #     in_channels=self.feat_in_chan,
+                    #     out_channels=4 * (self.reg_max + 1),
+                    #     kernel_size=1,
+                    #     stride=1,
+                    #     padding=0,
+                    #     weight_attr=ParamAttr(initializer=Normal(
+                    #         mean=0., std=0.01)),
+                    #     bias_attr=ParamAttr(initializer=Constant(value=0)))
+                    NormConvLayer(self.feat_in_chan, 4 * (self.reg_max + 1), kernel_size=1, padding=0)
+                )
                 self.head_reg_list.append(head_reg)
 
         # initialize the anchor points
@@ -413,6 +418,29 @@ class PicoHead(OTAVFLHead):
             return bbox_pred, bbox_num
 
 
+class NormConvLayer(nn.Layer):
+    def __init__(self,
+                 in_channels,
+                 out_channels,
+                 kernel_size=3,
+                 padding=1,
+                 conv_decay=0.):
+        super(NormConvLayer, self).__init__()
+        self.pw_conv = nn.Conv2D(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=1,
+            padding=padding,
+            weight_attr=ParamAttr(regularizer=L2Decay(conv_decay)),
+            bias_attr=False)
+
+    def forward(self, x):
+        x = self.pw_conv(x)
+        return x
+
+
+
 @register
 class PicoHeadV2(GFLHead):
     """
@@ -506,28 +534,51 @@ class PicoHeadV2(GFLHead):
         for i in range(len(fpn_stride)):
             head_cls = self.add_sublayer(
                 "head_cls" + str(i),
-                nn.Conv2D(
-                    in_channels=self.feat_in_chan,
-                    out_channels=self.cls_out_channels,
-                    kernel_size=1,
-                    stride=1,
-                    padding=0,
-                    weight_attr=ParamAttr(initializer=Normal(
-                        mean=0., std=0.01)),
-                    bias_attr=ParamAttr(
-                        initializer=Constant(value=bias_init_value))))
+                # ConvNormLayer
+                # nn.Conv2D(
+                #     in_channels=self.feat_in_chan,
+                #     out_channels=self.cls_out_channels,
+                #     kernel_size=1,
+                #     stride=1,
+                #     padding=0,
+                #     weight_attr=ParamAttr(initializer=Normal(
+                #         mean=0., std=0.01)),
+                #     bias_attr=ParamAttr(
+                #         initializer=Constant(value=bias_init_value))))
+
+                # ConvNormLayer(
+                #     ch_in=self.feat_in_chan,
+                #     ch_out=self.cls_out_channels,
+                #     filter_size=1,
+                #     stride=1,
+                #     bias_on=False,
+                #     lr_scale=2.)
+                NormConvLayer(self.feat_in_chan, self.cls_out_channels, kernel_size=1, padding=0)
+            )
             self.head_cls_list.append(head_cls)
             head_reg = self.add_sublayer(
                 "head_reg" + str(i),
-                nn.Conv2D(
-                    in_channels=self.feat_in_chan,
-                    out_channels=4 * (self.reg_max + 1),
-                    kernel_size=1,
-                    stride=1,
-                    padding=0,
-                    weight_attr=ParamAttr(initializer=Normal(
-                        mean=0., std=0.01)),
-                    bias_attr=ParamAttr(initializer=Constant(value=0))))
+                # nn.Conv2D(
+                #     in_channels=self.feat_in_chan,
+                #     out_channels=4 * (self.reg_max + 1),
+                #     kernel_size=1,
+                #     stride=1,
+                #     padding=0,
+                #     weight_attr=ParamAttr(initializer=Normal(
+                #         mean=0., std=0.01)),
+                #     bias_attr=ParamAttr(initializer=Constant(value=0)))
+
+                # ConvNormLayer(
+                #     ch_in=self.feat_in_chan,
+                #     ch_out=4 * (self.reg_max + 1),
+                #     filter_size=1,
+                #     stride=1,
+                #     bias_on=False,
+                #     lr_scale=2.)
+
+                NormConvLayer(self.feat_in_chan, 4 * (self.reg_max + 1), kernel_size=1, padding=0)
+
+            )
             self.head_reg_list.append(head_reg)
             if self.use_align_head:
                 self.cls_align.append(
@@ -600,8 +651,8 @@ class PicoHeadV2(GFLHead):
             _, _, h, w = fpn_feat.shape
             # task decomposition
             conv_cls_feat, se_feat = self.conv_feat(fpn_feat, i)
-            cls_logit = self.head_cls_list[i](se_feat)
-            reg_pred = self.head_reg_list[i](se_feat)
+            cls_logit = self.head_cls_list[i](se_feat)  # subgraph -> [Conv2D] -> sigmoid -> reshape -> concat
+            reg_pred = self.head_reg_list[i](se_feat)  # subgraph -> [Conv2D] -> transpose -> reshape -> softmax
 
             # cls prediction and alignment
             if self.use_align_head:
