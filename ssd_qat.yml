@@ -10,8 +10,11 @@ Distillation:
   alpha: 1.0
   loss: l2
 
-ChannelPrune:
-  pruned_ratio: 0.2
+#ChannelPrune:
+#  prune_params_name: ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+#  pruned_ratio: [0.36691237080304373, 0.3272108353863747, 0.20026328983337874, 0.15586220295879447, 0.24869129778386273, 0.22987618709880853, 0.24052414776120346, 0.0, 0.10447856428201978, 0.0, 0.0, 0.9, 0.34566418266387017, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9]
+ASPPrune:
+  prune_params_name: ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
 
 QuantAware:
   use_pact: true
@@ -23,11 +26,11 @@ QuantAware:
   - depthwise_conv2d
 
 TrainConfig:
-  train_iter: 10
+  train_iter: 1000
   eval_iter: 10
   learning_rate:  
     type: CosineAnnealingDecay
-    learning_rate: 0.0001
+    learning_rate: 0.00006
     T_max: 6000
   optimizer_builder:
     optimizer: 
