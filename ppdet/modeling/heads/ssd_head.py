@@ -90,6 +90,27 @@ class SSDExtraHead(nn.Layer):
             out.append(conv_layer(out[-1]))
         return out
 
+class NormConvLayer(nn.Layer):
+    def __init__(self,
+                 in_channels,
+                 out_channels,
+                 kernel_size=3,
+                 padding=1,
+                 conv_decay=0.):
+        super(NormConvLayer, self).__init__()
+        self.pw_conv = nn.Conv2D(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=1,
+            padding=padding,
+            weight_attr=ParamAttr(regularizer=L2Decay(conv_decay)),
+            bias_attr=False)
+
+    def forward(self, x):
+        x = self.pw_conv(x)
+        return x
+
 
 @register
 class SSDHead(nn.Layer):
@@ -144,11 +165,12 @@ class SSDHead(nn.Layer):
             if not use_sepconv:
                 box_conv = self.add_sublayer(
                     box_conv_name,
-                    nn.Conv2D(
+                    NormConvLayer(
                         in_channels=self.in_channels[i],
                         out_channels=num_prior * 4,
                         kernel_size=kernel_size,
-                        padding=padding))
+                        padding=padding,
+                        conv_decay=conv_decay))
             else:
                 box_conv = self.add_sublayer(
                     box_conv_name,
@@ -164,11 +186,12 @@ class SSDHead(nn.Layer):
             if not use_sepconv:
                 score_conv = self.add_sublayer(
                     score_conv_name,
-                    nn.Conv2D(
+                    NormConvLayer(
                         in_channels=self.in_channels[i],
                         out_channels=num_prior * self.num_classes,
                         kernel_size=kernel_size,
-                        padding=padding))
+                        padding=padding,
+                        conv_decay=conv_decay))
             else:
                 score_conv = self.add_sublayer(
                     score_conv_name,

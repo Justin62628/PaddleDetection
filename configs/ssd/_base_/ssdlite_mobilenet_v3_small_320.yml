@@ -11,7 +11,7 @@ MobileNetV3:
   model_name: small
   conv_decay: 0.00004
   with_extra_blocks: true
-  extra_block_filters: [[256, 512], [128, 256], [128, 256], [64, 128]]
+  extra_block_filters: [[128, 256], [64, 128], [64, 128], [32, 64]]  # TODO: remove extra blocks?
   feature_maps: [10, 13, 14, 15, 16, 17]
   lr_mult_list: [0.25, 0.25, 0.5, 0.5, 0.75]
   multiplier: 0.5
@@ -24,7 +24,7 @@ SSDHead:
     aspect_ratios: [[2.], [2., 3.], [2., 3.], [2., 3.], [2., 3.], [2., 3.]]
     min_ratio: 20
     max_ratio: 95
-    base_size: 320
+    base_size: 300
     min_sizes: []
     max_sizes: []
     offset: 0.5
@@ -37,7 +37,7 @@ BBoxPostProcess:
     name: SSDBox
   nms:
     name: MultiClassNMS
-    keep_top_k: 200
+    keep_top_k: 100
     score_threshold: 0.01
     nms_threshold: 0.45
     nms_top_k: 400

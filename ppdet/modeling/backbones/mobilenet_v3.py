@@ -91,11 +91,11 @@ class ConvBNLayer(nn.Layer):
         x = self.bn(x)
         if self.act is not None:
             if self.act == "relu":
-                x = F.relu(x)
+                x = F.relu6(x)
             elif self.act == "relu6":
                 x = F.relu6(x)
-            elif self.act == "relu":
-                x = F.hardswish(x)
+            elif self.act == "hard_swish":
+                x = F.relu6(x)
             else:
                 raise NotImplementedError(
                     "The activation function is selected incorrectly.")
@@ -119,7 +119,7 @@ class ResidualUnit(nn.Layer):
                  return_list=False,
                  name=''):
         super(ResidualUnit, self).__init__()
-        self.if_shortcut = stride == 1 and in_c == out_c
+        self.if_shortcut = False
         self.use_se = use_se
         self.return_list = return_list
 
@@ -184,9 +184,7 @@ class ResidualUnit(nn.Layer):
 class SEModule(nn.Layer):
     def __init__(self, channel, lr_mult, conv_decay, reduction=4, name=""):
         super(SEModule, self).__init__()
-        # self.avg_pool = nn.AdaptiveAvgPool2D(1)
-        self.avg_pool =  nn.Conv2D(in_channels=channel, out_channels=channel, kernel_size=1, stride=1, padding=0)
-        mid_channels = int(channel // reduction)
+        self.avg_pool = nn.AdaptiveAvgPool2D(1)
         mid_channels = int(channel // reduction)
         self.conv1 = nn.Conv2D(
             in_channels=channel,
@@ -214,7 +212,7 @@ class SEModule(nn.Layer):
         outputs = self.conv1(outputs)
         outputs = F.relu(outputs)
         outputs = self.conv2(outputs)
-        outputs = F.relu(outputs)
+        outputs = F.hardsigmoid(outputs, slope=0.2, offset=0.5)
         return paddle.multiply(x=inputs, y=outputs)
 
 
@@ -317,30 +315,30 @@ class MobileNetV3(nn.Layer):
                 [5, 72, 40, True, "relu", 2],  # RCNN output
                 [5, 120, 40, True, "relu", 1],
                 [5, 120, 40, True, "relu", 1],  # YOLOv3 output
-                [3, 240, 80, False, "relu", 2],  # RCNN output
-                [3, 200, 80, False, "relu", 1],
-                [3, 184, 80, False, "relu", 1],
-                [3, 184, 80, False, "relu", 1],
-                [3, 480, 112, True, "relu", 1],
-                [3, 672, 112, True, "relu", 1],  # YOLOv3 output
-                [5, 672, 160, True, "relu", 2],  # SSD/SSDLite/RCNN output
-                [5, 960, 160, True, "relu", 1],
-                [5, 960, 160, True, "relu", 1],  # YOLOv3 output
+                [3, 240, 80, False, "hard_swish", 2],  # RCNN output
+                [3, 200, 80, False, "hard_swish", 1],
+                [3, 184, 80, False, "hard_swish", 1],
+                [3, 184, 80, False, "hard_swish", 1],
+                [3, 480, 112, True, "hard_swish", 1],
+                [3, 672, 112, True, "hard_swish", 1],  # YOLOv3 output
+                [5, 672, 160, True, "hard_swish", 2],  # SSD/SSDLite/RCNN output
+                [5, 960, 160, True, "hard_swish", 1],
+                [5, 960, 160, True, "hard_swish", 1],  # YOLOv3 output
             ]
         elif model_name == "small":
             self.cfg = [
                 # k, exp, c,  se,     nl,  s,
-                [3, 16, 16, True, "relu", 2],
-                [3, 72, 24, False, "relu", 2],  # RCNN output
-                [3, 88, 24, False, "relu", 1],  # YOLOv3 output
-                [5, 96, 40, True, "relu", 2],  # RCNN output
-                [5, 240, 40, True, "relu", 1],
-                [5, 240, 40, True, "relu", 1],
-                [5, 120, 48, True, "relu", 1],
-                [5, 144, 48, True, "relu", 1],  # YOLOv3 output
-                [5, 288, 96, True, "relu", 2],  # SSD/SSDLite/RCNN output
-                [5, 576, 96, True, "relu", 1],
-                [5, 576, 96, True, "relu", 1],  # YOLOv3 output
+                [3, 16, 16, False, "relu6", 2],
+                [3, 72, 24, False, "relu6", 2],  # RCNN output
+                [3, 88, 24, False, "relu6", 1],  # YOLOv3 output
+                [5, 96, 40, False, "relu6", 2],  # RCNN output
+                [5, 120, 40, False, "relu6", 1],
+                [5, 120, 40, False, "relu6", 1],
+                [5, 60, 48, False, "relu6", 1],
+                [5, 72, 48, False, "relu6", 1],  # YOLOv3 output
+                [5, 144, 96, False, "relu6", 2],  # SSD/SSDLite/RCNN output
+                [5, 288, 96, False, "relu6", 1],
+                [5, 288, 96, False, "relu6", 1],  # YOLOv3 output, layer 10
             ]
         else:
             raise NotImplementedError(
@@ -360,7 +358,7 @@ class MobileNetV3(nn.Layer):
             stride=2,
             padding=1,
             num_groups=1,
-            act="relu",
+            act="relu6",
             lr_mult=lr_mult_list[0],
             conv_decay=conv_decay,
             norm_type=norm_type,
@@ -418,7 +416,7 @@ class MobileNetV3(nn.Layer):
                     stride=1,
                     padding=0,
                     num_groups=1,
-                    act="relu",
+                    act="relu6",
                     lr_mult=lr_mult,
                     conv_decay=conv_decay,
                     norm_type=norm_type,

@@ -652,7 +652,7 @@ class SSDBox(object):
     def __init__(self,
                  is_normalized=True,
                  prior_box_var=[0.1, 0.1, 0.2, 0.2],
-                 use_fuse_decode=False):
+                 use_fuse_decode=True):
         self.is_normalized = is_normalized
         self.norm_delta = float(not self.is_normalized)
         self.prior_box_var = prior_box_var
