@@ -10,6 +10,14 @@ Distillation:
   alpha: 1.0
   loss: l2
 
+ChannelPrune:
+  pruned_ratio: 0.5
+  criterion: l1_norm
+  prune_params_name: ["conv2d_10.w_0",
+"conv2d_12.w_0",
+"conv2d_15.w_0",
+"conv2d_14.w_0"]
+
 QuantAware:
   use_pact: true
   activation_quantize_type: 'moving_average_abs_max'
@@ -18,13 +26,14 @@ QuantAware:
   quantize_op_types:
   - conv2d
   - depthwise_conv2d
+#  is_full_quantize: true
 
 TrainConfig:
-  train_iter: 10
+  train_iter: 400
   eval_iter: 10
   learning_rate:  
     type: CosineAnnealingDecay
-    learning_rate: 0.00001
+    learning_rate: 0.000001
     T_max: 8000
   optimizer_builder:
     optimizer:
