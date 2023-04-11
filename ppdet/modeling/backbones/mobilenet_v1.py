@@ -193,7 +193,7 @@ class MobileNet(nn.Layer):
 
         self.conv1 = ConvBNLayer(
             in_channels=3,
-            out_channels=int(32 * scale),
+            out_channels=int(16 * scale),
             kernel_size=3,
             stride=2,
             padding=1,
@@ -207,10 +207,10 @@ class MobileNet(nn.Layer):
         dws21 = self.add_sublayer(
             "conv2_1",
             sublayer=DepthwiseSeparable(
-                in_channels=int(32 * scale),
-                out_channels1=32,
-                out_channels2=64,
-                num_groups=32,
+                in_channels=int(16 * scale),
+                out_channels1=16,
+                out_channels2=32,
+                num_groups=16,
                 stride=1,
                 scale=scale,
                 conv_lr=conv_learning_rate,
@@ -219,9 +219,42 @@ class MobileNet(nn.Layer):
                 norm_type=norm_type,
                 name="conv2_1"))
         self.dwsl.append(dws21)
-        self._update_out_channels(int(64 * scale), len(self.dwsl), feature_maps)
+        self._update_out_channels(int(32 * scale), len(self.dwsl), feature_maps)
         dws22 = self.add_sublayer(
             "conv2_2",
+            sublayer=DepthwiseSeparable(
+                in_channels=int(32 * scale),
+                out_channels1=32,
+                out_channels2=64,
+                num_groups=32,
+                stride=2,
+                scale=scale,
+                conv_lr=conv_learning_rate,
+                conv_decay=conv_decay,
+                norm_decay=norm_decay,
+                norm_type=norm_type,
+                name="conv2_2"))
+        self.dwsl.append(dws22)
+        self._update_out_channels(int(64 * scale), len(self.dwsl), feature_maps)
+        # 1/4
+        dws31 = self.add_sublayer(
+            "conv3_1",
+            sublayer=DepthwiseSeparable(
+                in_channels=int(64 * scale),
+                out_channels1=64,
+                out_channels2=64,
+                num_groups=64,
+                stride=1,
+                scale=scale,
+                conv_lr=conv_learning_rate,
+                conv_decay=conv_decay,
+                norm_decay=norm_decay,
+                norm_type=norm_type,
+                name="conv3_1"))
+        self.dwsl.append(dws31)
+        self._update_out_channels(int(64 * scale), len(self.dwsl), feature_maps)
+        dws32 = self.add_sublayer(
+            "conv3_2",
             sublayer=DepthwiseSeparable(
                 in_channels=int(64 * scale),
                 out_channels1=64,
@@ -233,12 +266,12 @@ class MobileNet(nn.Layer):
                 conv_decay=conv_decay,
                 norm_decay=norm_decay,
                 norm_type=norm_type,
-                name="conv2_2"))
-        self.dwsl.append(dws22)
+                name="conv3_2"))
+        self.dwsl.append(dws32)
         self._update_out_channels(int(128 * scale), len(self.dwsl), feature_maps)
-        # 1/4
-        dws31 = self.add_sublayer(
-            "conv3_1",
+        # 1/8
+        dws41 = self.add_sublayer(
+            "conv4_1",
             sublayer=DepthwiseSeparable(
                 in_channels=int(128 * scale),
                 out_channels1=128,
@@ -250,11 +283,11 @@ class MobileNet(nn.Layer):
                 conv_decay=conv_decay,
                 norm_decay=norm_decay,
                 norm_type=norm_type,
-                name="conv3_1"))
-        self.dwsl.append(dws31)
+                name="conv4_1"))
+        self.dwsl.append(dws41)
         self._update_out_channels(int(128 * scale), len(self.dwsl), feature_maps)
-        dws32 = self.add_sublayer(
-            "conv3_2",
+        dws42 = self.add_sublayer(
+            "conv4_2",
             sublayer=DepthwiseSeparable(
                 in_channels=int(128 * scale),
                 out_channels1=128,
@@ -266,28 +299,29 @@ class MobileNet(nn.Layer):
                 conv_decay=conv_decay,
                 norm_decay=norm_decay,
                 norm_type=norm_type,
-                name="conv3_2"))
-        self.dwsl.append(dws32)
+                name="conv4_2"))
+        self.dwsl.append(dws42)
         self._update_out_channels(int(256 * scale), len(self.dwsl), feature_maps)
-        # 1/8
-        dws41 = self.add_sublayer(
-            "conv4_1",
-            sublayer=DepthwiseSeparable(
-                in_channels=int(256 * scale),
-                out_channels1=256,
-                out_channels2=256,
-                num_groups=256,
-                stride=1,
-                scale=scale,
-                conv_lr=conv_learning_rate,
-                conv_decay=conv_decay,
-                norm_decay=norm_decay,
-                norm_type=norm_type,
-                name="conv4_1"))
-        self.dwsl.append(dws41)
-        self._update_out_channels(int(256 * scale), len(self.dwsl), feature_maps)
-        dws42 = self.add_sublayer(
-            "conv4_2",
+        # 1/16
+        for i in range(5):
+            tmp = self.add_sublayer(
+                "conv5_" + str(i + 1),
+                sublayer=DepthwiseSeparable(
+                    in_channels=int(256 * scale),
+                    out_channels1=256,
+                    out_channels2=256,
+                    num_groups=256,
+                    stride=1,
+                    scale=scale,
+                    conv_lr=conv_learning_rate,
+                    conv_decay=conv_decay,
+                    norm_decay=norm_decay,
+                    norm_type=norm_type,
+                    name="conv5_" + str(i + 1)))
+            self.dwsl.append(tmp)
+            self._update_out_channels(int(256 * scale), len(self.dwsl), feature_maps)
+        dws56 = self.add_sublayer(
+            "conv5_6",
             sublayer=DepthwiseSeparable(
                 in_channels=int(256 * scale),
                 out_channels1=256,
@@ -299,51 +333,17 @@ class MobileNet(nn.Layer):
                 conv_decay=conv_decay,
                 norm_decay=norm_decay,
                 norm_type=norm_type,
-                name="conv4_2"))
-        self.dwsl.append(dws42)
-        self._update_out_channels(int(512 * scale), len(self.dwsl), feature_maps)
-        # 1/16
-        for i in range(5):
-            tmp = self.add_sublayer(
-                "conv5_" + str(i + 1),
-                sublayer=DepthwiseSeparable(
-                    in_channels=int(512 * scale),
-                    out_channels1=512,
-                    out_channels2=512,
-                    num_groups=512,
-                    stride=1,
-                    scale=scale,
-                    conv_lr=conv_learning_rate,
-                    conv_decay=conv_decay,
-                    norm_decay=norm_decay,
-                    norm_type=norm_type,
-                    name="conv5_" + str(i + 1)))
-            self.dwsl.append(tmp)
-            self._update_out_channels(int(512 * scale), len(self.dwsl), feature_maps)
-        dws56 = self.add_sublayer(
-            "conv5_6",
-            sublayer=DepthwiseSeparable(
-                in_channels=int(512 * scale),
-                out_channels1=512,
-                out_channels2=1024,
-                num_groups=512,
-                stride=2,
-                scale=scale,
-                conv_lr=conv_learning_rate,
-                conv_decay=conv_decay,
-                norm_decay=norm_decay,
-                norm_type=norm_type,
                 name="conv5_6"))
         self.dwsl.append(dws56)
-        self._update_out_channels(int(1024 * scale), len(self.dwsl), feature_maps)
+        self._update_out_channels(int(512 * scale), len(self.dwsl), feature_maps)
         # 1/32
         dws6 = self.add_sublayer(
             "conv6",
             sublayer=DepthwiseSeparable(
-                in_channels=int(1024 * scale),
-                out_channels1=1024,
-                out_channels2=1024,
-                num_groups=1024,
+                in_channels=int(512 * scale),
+                out_channels1=512,
+                out_channels2=512,
+                num_groups=512,
                 stride=1,
                 scale=scale,
                 conv_lr=conv_learning_rate,
@@ -352,12 +352,12 @@ class MobileNet(nn.Layer):
                 norm_type=norm_type,
                 name="conv6"))
         self.dwsl.append(dws6)
-        self._update_out_channels(int(1024 * scale), len(self.dwsl), feature_maps)
+        self._update_out_channels(int(512 * scale), len(self.dwsl), feature_maps)
 
         if self.with_extra_blocks:
             self.extra_blocks = []
             for i, block_filter in enumerate(self.extra_block_filters):
-                in_c = 1024 if i == 0 else self.extra_block_filters[i - 1][1]
+                in_c = 512 if i == 0 else self.extra_block_filters[i - 1][1]
                 conv_extra = self.add_sublayer(
                     "conv7_" + str(i + 1),
                     sublayer=ExtraBlock(

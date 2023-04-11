@@ -64,9 +64,9 @@ class SepConvLayer(nn.Layer):
 
 class SSDExtraHead(nn.Layer):
     def __init__(self,
-                 in_channels=256,
-                 out_channels=([256, 512], [256, 512], [128, 256], [128, 256],
-                               [128, 256]),
+                 in_channels=128,
+                 out_channels=([128, 256], [128, 256], [64, 128], [64, 128],
+                               [64, 128]),
                  strides=(2, 2, 2, 1, 1),
                  paddings=(1, 1, 1, 0, 0)):
         super(SSDExtraHead, self).__init__()
@@ -109,6 +109,7 @@ class NormConvLayer(nn.Layer):
 
     def forward(self, x):
         x = self.pw_conv(x)
+        x = F.relu(x)
         return x
 
 
@@ -134,7 +135,7 @@ class SSDHead(nn.Layer):
 
     def __init__(self,
                  num_classes=80,
-                 in_channels=(512, 1024, 512, 256, 256, 256),
+                 in_channels=(256, 512, 256, 128, 128, 128),
                  anchor_generator=_get_class_default_kwargs(AnchorGeneratorSSD),
                  kernel_size=3,
                  padding=1,
@@ -152,12 +153,12 @@ class SSDHead(nn.Layer):
 
         if self.use_extra_head:
             self.ssd_extra_head = SSDExtraHead()
-            self.in_channels = [256, 512, 512, 256, 256, 256]
+            self.in_channels = [128, 256, 256, 128, 128, 128]
 
         if isinstance(anchor_generator, dict):
             self.anchor_generator = AnchorGeneratorSSD(**anchor_generator)
 
-        self.num_priors = self.anchor_generator.num_priors
+        self.num_priors = self.anchor_generator.num_priors[:len(self.in_channels)]
         self.box_convs = []
         self.score_convs = []
         for i, num_prior in enumerate(self.num_priors):
