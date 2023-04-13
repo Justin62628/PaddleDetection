@@ -10,6 +10,8 @@ metric: VOC
 
 num_classes: 4
 
+epoch: 1000
+
 LearningRate:
   base_lr: 0.02
   schedulers:
@@ -21,12 +23,11 @@ LearningRate:
 
 OptimizerBuilder:
   optimizer:
-    momentum: 0.9
-    type: Momentum
+    momentum: 0.0
+    type: RMSProp
   regularizer:
-    factor: 0.0005
+    factor: 0.00005
     type: L2
-
 
 TrainDataset:
   !VOCDataSet

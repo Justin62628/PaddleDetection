@@ -11,10 +11,31 @@ Distillation:
   loss: l2
 
 ChannelPrune:
-  prune_params_name: ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
-  pruned_ratio: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0, 0.10447856428201978, 0.0, 0.0, 0.9, 0.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9]
-#ASPPrune:
-#  prune_params_name: ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+  # prune_params_name: 
+  # ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0x', 
+  #  'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 
+  #  'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 
+  #  'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 
+  #  'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 
+  #  'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 
+  #  'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 
+  #  'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 
+  #  'conv2d_45.w_0', 'conv2d_46.w_0']
+  # pruned_ratio: 
+  # [0.5439513462774589, 0.43238938848583, 0.270867059615702, 0.6180796474257713, 
+  #  0.47929473898262104, 0.671813641633314, 0.6001088424928375, 0.5169565708067133, 
+  #  0.5639386790103756, 0.49857643593018414, 0.5065529788643779, 0.9, 
+  #  0.8179832970447176, 0.9, 0.9, 0.9, 
+  #  0.9, 0.9, 0.9, 0.9, 
+  #  0.9, 0.9, 0.9, 0.9, 
+  #  0.9, 0.9, 0.9, 0.9, 
+  #  0.9, 0.9, 0.9, 0.9, 
+  #  0.9, 0.9]
+  prune_params_name: ['conv2d_14.w_0', 'conv2d_16.w_0','conv2d_18.w_0','conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+  pruned_ratio: [0.2, 0.2, 0.1, 0.2, 0.99, 0.6, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
+
+# ASPPrune:
+#  prune_params_name: ['conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
 
 QuantAware:
   use_pact: true
@@ -26,8 +47,8 @@ QuantAware:
   - depthwise_conv2d
 
 TrainConfig:
-  train_iter: 10000
-  eval_iter: 10
+  train_iter: 3000
+  eval_iter: 200
   learning_rate:  
     type: CosineAnnealingDecay
     learning_rate: 0.00006

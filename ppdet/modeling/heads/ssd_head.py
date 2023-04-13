@@ -109,7 +109,7 @@ class NormConvLayer(nn.Layer):
 
     def forward(self, x):
         x = self.pw_conv(x)
-        x = F.relu(x)
+        # x = F.relu(x)
         return x
 
 

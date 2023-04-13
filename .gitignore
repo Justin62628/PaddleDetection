@@ -27,6 +27,7 @@ __pycache__/
 /output/
 /inference_model/
 /output_inference/
+/output_pruned/
 /parts/
 /sdist/
 /var/
