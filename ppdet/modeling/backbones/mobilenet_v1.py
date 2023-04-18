@@ -357,7 +357,7 @@ class MobileNet(nn.Layer):
         if self.with_extra_blocks:
             self.extra_blocks = []
             for i, block_filter in enumerate(self.extra_block_filters):
-                in_c = 512 if i == 0 else self.extra_block_filters[i - 1][1]
+                in_c = int(512 * scale) if i == 0 else self.extra_block_filters[i - 1][1]
                 conv_extra = self.add_sublayer(
                     "conv7_" + str(i + 1),
                     sublayer=ExtraBlock(

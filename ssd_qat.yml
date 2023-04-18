@@ -31,11 +31,32 @@ ChannelPrune:
   #  0.9, 0.9, 0.9, 0.9, 
   #  0.9, 0.9, 0.9, 0.9, 
   #  0.9, 0.9]
+
+  # prune_params_name: scale0.5 extra0.5
+  # ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 
+  #  'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 
+  #  'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 
+  #  'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 
+  #  'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 
+  #  'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 
+  #  'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+  # [0.0, 0.19003144310613673, 0.3242008588130022, 0.12974344793675463, 0.2534513705429651, 
+  #  0.32760067291549416, 0.31088160341637294, 0.3285972753130643, 0.28456392001947683, 0.4180107717438411, 
+  #  0.3539130233397668, 1.0, 0.8304191167638947, 1.0, 1.0, 
+  #  1.0, 1.0, 1.0, 1.0, 1.0, 
+  #  1.0, 1.0, 1.0, 1.0, 1.0, 
+  #  1.0, 1.0, 1.0, 1.0, 1.0, 
+  #  1.0, 1.0, 1.0, 1.0]
+
+  # prune: scale 1.0 extra 1.0
   prune_params_name: ['conv2d_14.w_0', 'conv2d_16.w_0','conv2d_18.w_0','conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
   pruned_ratio: [0.2, 0.2, 0.1, 0.2, 0.99, 0.6, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
 
 # ASPPrune:
+# scale1.0
 #  prune_params_name: ['conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+# scale0.5
+  # prune_params_name: ['conv2d_24.w_0', 'conv2d_22.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
 
 QuantAware:
   use_pact: true
@@ -47,14 +68,17 @@ QuantAware:
   - depthwise_conv2d
 
 TrainConfig:
-  train_iter: 3000
-  eval_iter: 200
+  train_iter: 10000
+  eval_iter: 100
   learning_rate:  
     type: CosineAnnealingDecay
     learning_rate: 0.00006
+    # learning_rate: 0.0000001
     T_max: 6000
   optimizer_builder:
-    optimizer: 
+    # optimizer:
+    #   momentum: 0.1
+    #   type: RMSProp
+    optimizer:
       type: SGD
     weight_decay: 4.0e-05
-

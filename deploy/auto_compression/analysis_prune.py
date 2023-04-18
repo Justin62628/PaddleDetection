@@ -60,7 +60,7 @@ def argsparser():
         '--pruned_ratios',
         nargs='+',
         type=float,
-        default=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+        default=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
         help="The ratios to be pruned when compute sensitivity.")
     parser.add_argument(
         '--target_loss',

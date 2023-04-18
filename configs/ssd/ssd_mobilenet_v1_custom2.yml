@@ -4,7 +4,7 @@ _BASE_: [
 
 snapshot_epoch: 2
 weights: ../output/ssd_mobilenet_v1_custom/model_final
-pretrain_weights: output/ssd_mobilenet_v1_custom/best_model.pdparams
+pretrain_weights: output/ssd_mobilenet_v1_custom2/best_model.pdparams
 # metric: COCO
 metric: VOC
 
@@ -13,7 +13,7 @@ num_classes: 4
 epoch: 1000
 
 LearningRate:
-  base_lr: 0.001
+  base_lr: 0.002
   schedulers:
   - !CosineDecay
     max_epochs: 1700
@@ -23,7 +23,7 @@ LearningRate:
 
 OptimizerBuilder:
   optimizer:
-    momentum: 0.0
+    momentum: 0.1
     type: RMSProp
   regularizer:
     factor: 0.00005
@@ -48,8 +48,8 @@ TestDataset:
   !ImageFolder
     anno_path: dataset/alum/label_list.txt
 
-bufsize: 3
-worker_num: 1
+# bufsize: 3
+worker_num: 4
 
 # enabled only when QAT
 #eval_height: &eval_height 320
