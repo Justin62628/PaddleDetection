@@ -8,10 +8,11 @@ SSD:
 
 MobileNet:
   norm_decay: 0.
-  scale: 0.5
+  # scale: 0.5
+  scale: 1.0
   conv_learning_rate: 0.1
-  # extra_block_filters: [[256, 512], [128, 256], [128, 256], [64, 128]]
-  extra_block_filters: [[128, 256], [64, 128], [64, 128], [32, 64]]
+  extra_block_filters: [[256, 512], [128, 256], [128, 256], [64, 128]]
+  # extra_block_filters: [[128, 256], [64, 128], [64, 128], [32, 64]]
   with_extra_blocks: true
   feature_maps: [11, 13, 14, 15, 16, 17]
 

@@ -38,8 +38,8 @@ Distillation:
   #  0.9, 0.9]
 
   # prune: scale 1.0 extra 1.0
-  # prune_params_name: ['conv2d_0.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0',  'conv2d_14.w_0', 'conv2d_16.w_0','conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
-  # pruned_ratio: [0.2, 0.5, 0.5, 0.4, 0.5, 0.9, 0.5, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9]
+  # prune_params_name: ['conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+  # pruned_ratio: [0.2, 0.3, 0.2, 0.99, 0.6, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
 
   # prune_params_name: scale0.5 extra0.5
   # ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 
@@ -61,9 +61,9 @@ Distillation:
   # prune_params_name: ['conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
   # pruned_ratio: [0.2, 0.3, 0.2, 0.99, 0.6, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
 
-# ASPPrune:
+ASPPrune:
 # scale1.0
-#  prune_params_name: ['conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+ prune_params_name:   ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
 # scale0.5
   # prune_params_name: ['conv2d_24.w_0', 'conv2d_22.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
 

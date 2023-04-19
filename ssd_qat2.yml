@@ -2,7 +2,8 @@ Global:
   reader_config: configs/ssd/ssd_mobilenet_v1_custom.yml
   include_nms: True
   Evaluation: True
-  model_dir: output_inference/ssd_mobilenet_v1_custom_scale0.5_extra0.5
+  # model_dir: output_inference/ssd_mobilenet_v1_custom_scale0.5_extra0.5
+  model_dir: output_inference/ssd_mobilenet_v1_custom_scale1.0
   # model_dir: output_pruned/ssd_mobilenet_v1_custom_std
 
   model_filename: model.pdmodel
@@ -14,7 +15,7 @@ Distillation:
   alpha: 1.0
   loss: l2
 
-# ChannelPrune:
+ChannelPrune:
   # prune_params_name: 
   # ['conv2d_0.w_0s', 'conv2d_2.w_0x', 'conv2d_4.w_0x', 'conv2d_6.w_0x', 
   #  'conv2d_8.w_0', 'conv2d_10.w_0s', 'conv2d_12.w_0s', 'conv2d_14.w_0', 
@@ -37,8 +38,8 @@ Distillation:
   #  0.9, 0.9]
 
   # prune: scale 1.0 extra 1.0
-  # prune_params_name: ['conv2d_0.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0',  'conv2d_14.w_0', 'conv2d_16.w_0','conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
-  # pruned_ratio: [0.2, 0.5, 0.5, 0.4, 0.5, 0.9, 0.5, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9]
+  prune_params_name: ['conv2d_14.w_0', 'conv2d_16.w_0', 'conv2d_20.w_0', 'conv2d_22.w_0', 'conv2d_24.w_0', 'conv2d_26.w_0', 'conv2d_27.w_0', 'conv2d_28.w_0', 'conv2d_29.w_0', 'conv2d_30.w_0', 'conv2d_31.w_0', 'conv2d_32.w_0', 'conv2d_33.w_0', 'conv2d_34.w_0', 'conv2d_35.w_0', 'conv2d_36.w_0', 'conv2d_37.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0', 'conv2d_44.w_0', 'conv2d_45.w_0', 'conv2d_46.w_0']
+  pruned_ratio: [0.2, 0.3, 0.2, 0.99, 0.6, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
 
   # prune_params_name: scale0.5 extra0.5
   # ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 'conv2d_8.w_0', 
@@ -76,11 +77,11 @@ QuantAware:
   - depthwise_conv2d
 
 TrainConfig:
-  train_iter: 5000
+  train_iter: 50000
   eval_iter: 200
   learning_rate:  
     type: CosineAnnealingDecay
-    learning_rate: 0.000001
+    learning_rate: 0.0001
     # learning_rate: 0.0000001
     T_max: 25000
   optimizer_builder:
@@ -89,4 +90,4 @@ TrainConfig:
     #   type: RMSProp
     optimizer:
       type: Adam
-    weight_decay: 1.0e-05
+    weight_decay: 4.0e-05
