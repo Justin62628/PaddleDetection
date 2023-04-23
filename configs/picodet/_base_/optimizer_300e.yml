@@ -13,6 +13,8 @@ OptimizerBuilder:
   optimizer:
     momentum: 0.9
     type: Momentum
+    # type: Adam
+    # weight_decay: 4.0e-05
   regularizer:
     factor: 0.00004
     type: L2

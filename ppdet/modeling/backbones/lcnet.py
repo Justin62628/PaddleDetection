@@ -86,10 +86,8 @@ class ConvBNLayer(nn.Layer):
             num_filters,
             weight_attr=ParamAttr(regularizer=L2Decay(0.0)),
             bias_attr=ParamAttr(regularizer=L2Decay(0.0)))
-        if act == 'hard_swish':
-            self.act = nn.ReLU()
-        elif act == 'relu6':
-            self.act = nn.ReLU6()
+        self.act = nn.ReLU()
+
 
     def forward(self, x):
         x = self.conv(x)

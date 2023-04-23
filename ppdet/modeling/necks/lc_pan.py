@@ -55,66 +55,66 @@ class LCPAN(nn.Layer):
         self.out_channels = out_channels
         self.spatial_scales = spatial_scales
         self.num_features = num_features
-        conv_func = DPModule if use_depthwise else ConvBNLayer
+        # conv_func = DPModule if use_depthwise else ConvBNLayer
 
-        NET_CONFIG = {
-            #k, in_c, out_c, stride, use_se
-            "block1": [
-                [kernel_size, out_channels * 2, out_channels * 2, 1, False],
-                [kernel_size, out_channels * 2, out_channels, 1, False],
-            ],
-            "block2": [
-                [kernel_size, out_channels * 2, out_channels * 2, 1, False],
-                [kernel_size, out_channels * 2, out_channels, 1, False],
-            ]
-        }
+        # NET_CONFIG = {
+        #     #k, in_c, out_c, stride, use_se
+        #     "block1": [
+        #         [kernel_size, out_channels * 2, out_channels * 2, 1, False],
+        #         [kernel_size, out_channels * 2, out_channels, 1, False],
+        #     ],
+        #     "block2": [
+        #         [kernel_size, out_channels * 2, out_channels * 2, 1, False],
+        #         [kernel_size, out_channels * 2, out_channels, 1, False],
+        #     ]
+        # }
 
-        if self.num_features == 4:
-            self.first_top_conv = conv_func(
-                in_channels[0], in_channels[0], kernel_size, stride=2, act=act)
-            self.second_top_conv = conv_func(
-                in_channels[0], in_channels[0], kernel_size, stride=2, act=act)
-            self.spatial_scales.append(self.spatial_scales[-1] / 2)
+        # if self.num_features == 4:
+        #     self.first_top_conv = conv_func(
+        #         in_channels[0], in_channels[0], kernel_size, stride=2, act=act)
+        #     self.second_top_conv = conv_func(
+        #         in_channels[0], in_channels[0], kernel_size, stride=2, act=act)
+        #     self.spatial_scales.append(self.spatial_scales[-1] / 2)
 
-        # build top-down blocks
-        # self.upsample = nn.Conv2D(in_channels=in_channels[0], out_channels=in_channels[0], kernel_size=2, stride=2, padding=0)
-        self.upsample = nn.Upsample(scale_factor=2, mode='nearest')
-        self.top_down_blocks = nn.LayerList()
-        for idx in range(len(in_channels) - 1, 0, -1):
-            self.top_down_blocks.append(
-                nn.Sequential(* [
-                    DepthwiseSeparable(
-                        num_channels=in_c,
-                        num_filters=out_c,
-                        dw_size=k,
-                        stride=s,
-                        use_se=se)
-                    for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG[
-                        "block1"])
-                ]))
+        # # build top-down blocks
+        # # self.upsample = nn.Conv2D(in_channels=in_channels[0], out_channels=in_channels[0], kernel_size=2, stride=2, padding=0)
+        # self.upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        # self.top_down_blocks = nn.LayerList()
+        # for idx in range(len(in_channels) - 1, 0, -1):
+        #     self.top_down_blocks.append(
+        #         nn.Sequential(* [
+        #             DepthwiseSeparable(
+        #                 num_channels=in_c,
+        #                 num_filters=out_c,
+        #                 dw_size=k,
+        #                 stride=s,
+        #                 use_se=se)
+        #             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG[
+        #                 "block1"])
+        #         ]))
 
-        # build bottom-up blocks
-        self.downsamples = nn.LayerList()
-        self.bottom_up_blocks = nn.LayerList()
-        for idx in range(len(in_channels) - 1):
-            self.downsamples.append(
-                conv_func(
-                    in_channels[idx],
-                    in_channels[idx],
-                    kernel_size=kernel_size,
-                    stride=2,
-                    act=act))
-            self.bottom_up_blocks.append(
-                nn.Sequential(* [
-                    DepthwiseSeparable(
-                        num_channels=in_c,
-                        num_filters=out_c,
-                        dw_size=k,
-                        stride=s,
-                        use_se=se)
-                    for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG[
-                        "block2"])
-                ]))
+        # # build bottom-up blocks
+        # self.downsamples = nn.LayerList()
+        # self.bottom_up_blocks = nn.LayerList()
+        # for idx in range(len(in_channels) - 1):
+        #     self.downsamples.append(
+        #         conv_func(
+        #             in_channels[idx],
+        #             in_channels[idx],
+        #             kernel_size=kernel_size,
+        #             stride=2,
+        #             act=act))
+        #     self.bottom_up_blocks.append(
+        #         nn.Sequential(* [
+        #             DepthwiseSeparable(
+        #                 num_channels=in_c,
+        #                 num_filters=out_c,
+        #                 dw_size=k,
+        #                 stride=s,
+        #                 use_se=se)
+        #             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG[
+        #                 "block2"])
+        #         ]))
 
     def forward(self, inputs):
         """
@@ -158,7 +158,7 @@ class LCPAN(nn.Layer):
         # outs.append(out)
         # outs.append(inputs[idx + 1])
 
-        top_features = None
+        # top_features = None
         # if self.num_features == 4:
         #     top_features = self.first_top_conv(inputs[-1])
         #     top_features = top_features + self.second_top_conv(outs[-1])

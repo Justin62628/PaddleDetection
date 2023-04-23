@@ -10,13 +10,13 @@ Distillation:
   alpha: 1.0
   loss: l2
 
-ChannelPrune:
-  pruned_ratio: 0.5
-  criterion: l1_norm
-  prune_params_name: ["conv2d_10.w_0",
-"conv2d_12.w_0",
-"conv2d_15.w_0",
-"conv2d_14.w_0"]
+# ChannelPrune:
+#   pruned_ratio: 0.5
+#   criterion: l1_norm
+#   prune_params_name: ["conv2d_10.w_0",
+# "conv2d_12.w_0",
+# "conv2d_15.w_0",
+# "conv2d_14.w_0"]
 
 QuantAware:
   use_pact: true
@@ -29,7 +29,7 @@ QuantAware:
 #  is_full_quantize: true
 
 TrainConfig:
-  train_iter: 400
+  train_iter: 100
   eval_iter: 10
   learning_rate:  
     type: CosineAnnealingDecay
@@ -37,7 +37,7 @@ TrainConfig:
     T_max: 8000
   optimizer_builder:
     optimizer:
-      type: SGD
+      type: Adam
     weight_decay: 4.0e-05
 
 
