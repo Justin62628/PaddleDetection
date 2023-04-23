@@ -1,0 +1,30 @@
+_BASE_: [
+  # '../datasets/coco_detection.yml',
+  '../datasets/voc.yml',
+  '../runtime.yml',
+  './picodet_s_288.yml'
+]
+
+# metric: COCO
+metric: VOC
+
+num_classes: 4
+
+TrainDataset:
+  !VOCDataSet
+    dataset_dir: dataset/alum/
+    anno_path: train.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+
+EvalDataset:
+  !VOCDataSet
+    dataset_dir: dataset/alum/
+    anno_path: val.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+TestDataset:
+  !ImageFolder
+    anno_path: dataset/alum/label_list.txt

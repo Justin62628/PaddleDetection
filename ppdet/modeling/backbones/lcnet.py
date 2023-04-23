@@ -147,7 +147,7 @@ class SEModule(nn.Layer):
             kernel_size=1,
             stride=1,
             padding=0)
-        self.hardsigmoid = nn.LeakyReLU()
+        self.hardsigmoid = nn.ReLU()
 
     def forward(self, x):
         identity = x

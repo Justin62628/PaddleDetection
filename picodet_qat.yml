@@ -1,8 +1,8 @@
 Global:
-  reader_config: configs/picodet/picodet_s_300_custom.yml
+  reader_config: configs/picodet/picodet_s_288_custom.yml
   include_nms: True
   Evaluation: True
-  model_dir: output_inference/picodet_s_300_custom
+  model_dir: output_inference/picodet_s_288_custom
   model_filename: model.pdmodel
   params_filename: model.pdiparams
 
