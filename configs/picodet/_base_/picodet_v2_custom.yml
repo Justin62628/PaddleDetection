@@ -1,7 +1,7 @@
 architecture: PicoDet
 #pretrain_weights: https://paddledet.bj.bcebos.com/models/pretrained/LCNet_x1_5_pretrained.pdparams
 
-picodet_channel: &picodet_channel 16
+picodet_channel: &picodet_channel 32
 
 PicoDet:
   backbone: LCNet

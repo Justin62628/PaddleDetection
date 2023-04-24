@@ -7,16 +7,29 @@ Global:
   params_filename: model.pdiparams
 
 Distillation:
-  alpha: 1.0
+  alpha: 0.9
   loss: l2
 
 # ChannelPrune:
-#   pruned_ratio: 0.5
 #   criterion: l1_norm
-#   prune_params_name: ["conv2d_10.w_0",
-# "conv2d_12.w_0",
-# "conv2d_15.w_0",
-# "conv2d_14.w_0"]
+  # prune_params_name: 
+  # ['conv2d_0.w_0', 'conv2d_2.w_0', 'conv2d_4.w_0', 'conv2d_6.w_0', 
+  #  'conv2d_8.w_0', 'conv2d_10.w_0', 'conv2d_12.w_0', 'conv2d_14.w_0', 
+  #  'conv2d_16.w_0', 'conv2d_18.w_0', 'conv2d_20.w_0', 'conv2d_21.w_0', 
+  #  'conv2d_22.w_0', 'conv2d_23.w_0', 'conv2d_25.w_0', 'conv2d_27.w_0', 
+  #  'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_29.w_0', 'conv2d_31.w_0', 
+  #  'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_33.w_0', 'conv2d_35.w_0', 
+  #  'conv2d_42.w_0', 'conv2d_43.w_0']
+  # pruned_ratio: 
+  # [0.45230414096389576, 0.7165693549172235, 0.6138112574163037, 0.5720121699682598, 
+  #  0.6302143258187674, 0.6462919396011051, 0.7403208191665767, 0.6583963426418176, 
+  #  0.7540099435060693, 0.825786555426698, 1.0, 0.9482552428029705, 
+  #  1.0, 1.0, 0.6742457023097422, 0.2758093700645455, 
+  #  1.0, 1.0, 1.0, 1.0, 
+  #  1.0, 1.0, 1.0, 1.0, 
+  #  1.0, 1.0]
+  # prune_params_name: ['conv2d_20.w_0', 'conv2d_21.w_0', 'conv2d_22.w_0', 'conv2d_23.w_0', 'conv2d_38.w_0', 'conv2d_39.w_0', 'conv2d_29.w_0', 'conv2d_31.w_0', 'conv2d_40.w_0', 'conv2d_41.w_0', 'conv2d_33.w_0', 'conv2d_35.w_0', 'conv2d_42.w_0', 'conv2d_43.w_0']
+  # pruned_ratio: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
 
 QuantAware:
   use_pact: true
@@ -29,7 +42,7 @@ QuantAware:
 #  is_full_quantize: true
 
 TrainConfig:
-  train_iter: 100
+  train_iter: 5000
   eval_iter: 10
   learning_rate:  
     type: CosineAnnealingDecay

@@ -102,7 +102,7 @@ class PicoFeat(nn.Layer):
                     ConvNormLayer(
                         ch_in=in_c,
                         ch_out=feat_out,
-                        filter_size=5,
+                        filter_size=3,
                         stride=1,
                         groups=feat_out,
                         norm_type=norm_type,
@@ -127,7 +127,7 @@ class PicoFeat(nn.Layer):
                         ConvNormLayer(
                             ch_in=in_c,
                             ch_out=feat_out,
-                            filter_size=5,
+                            filter_size=3,
                             stride=1,
                             groups=feat_out,
                             norm_type=norm_type,
@@ -534,7 +534,7 @@ class PicoHeadV2(GFLHead):
                     DPModule(
                         self.feat_in_chan,
                         1,
-                        5,
+                        3,
                         act=self.act,
                         use_act_in_out=False))
 
