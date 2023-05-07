@@ -6,7 +6,7 @@ _BASE_: [
   './_base_/ppyoloe_plus_reader.yml',
 ]
 
-log_iter: 10
+log_iter: 2
 snapshot_epoch: 1
 epoch: 80
 weights: output/ppyoloe_plus_crn_l_80e_coco/model_final
@@ -20,11 +20,31 @@ width_mult: 1.0
 metric: VOC
 
 # num_classes: 6
-num_classes: 3
+#num_classes: 3
+num_classes: 5
+
+#TrainDataset:
+#  !VOCDataSet
+#    dataset_dir: dataset/road_disease_voc/
+#    anno_path: train.txt
+#    label_list: label_list.txt
+#    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+#
+#
+#EvalDataset:
+#  !VOCDataSet
+#    dataset_dir: dataset/road_disease_voc/
+#    anno_path: test.txt
+#    label_list: label_list.txt
+#    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+#
+#TestDataset:
+#  !ImageFolder
+#    anno_path: dataset/road_disease_voc/label_list.txt
 
 TrainDataset:
   !VOCDataSet
-    dataset_dir: dataset/road_disease_voc/
+    dataset_dir: dataset/rdd/
     anno_path: train.txt
     label_list: label_list.txt
     data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
@@ -32,11 +52,11 @@ TrainDataset:
 
 EvalDataset:
   !VOCDataSet
-    dataset_dir: dataset/road_disease_voc/
+    dataset_dir: dataset/rdd/
     anno_path: test.txt
     label_list: label_list.txt
     data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
 
 TestDataset:
   !ImageFolder
-    anno_path: dataset/road_disease_voc/label_list.txt
+    anno_path: dataset/rdd/label_list.txt
