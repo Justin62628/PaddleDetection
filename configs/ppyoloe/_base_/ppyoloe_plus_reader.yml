@@ -1,21 +1,21 @@
-worker_num: 4
-eval_height: &eval_height 640
-eval_width: &eval_width 640
+worker_num: 1
+eval_height: &eval_height 480
+eval_width: &eval_width 480
 eval_size: &eval_size [*eval_height, *eval_width]
 
 TrainReader:
   sample_transforms:
     - Decode: {}
-    - RandomDistort: {}
-    - RandomExpand: {fill_value: [123.675, 116.28, 103.53]}
-    - RandomCrop: {}
+    # - RandomDistort: {}
+    # - RandomExpand: {fill_value: [123.675, 116.28, 103.53]}
+    # - RandomCrop: {}
     - RandomFlip: {}
   batch_transforms:
-    - BatchRandomResize: {target_size: [320, 352, 384, 416, 448, 480, 512, 544, 576, 608, 640, 672, 704, 736, 768], random_size: True, random_interp: True, keep_ratio: False}
+    - BatchRandomResize: {target_size: [320, 384, 416, 480, 512, 576, 608], random_size: True, random_interp: True, keep_ratio: False}
     - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
     - Permute: {}
     - PadGT: {}
-  batch_size: 8
+  batch_size: 32
   shuffle: true
   drop_last: true
   use_shared_memory: true
@@ -27,7 +27,7 @@ EvalReader:
     - Resize: {target_size: *eval_size, keep_ratio: False, interp: 2}
     - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
     - Permute: {}
-  batch_size: 2
+  batch_size: 1
 
 TestReader:
   inputs_def:

@@ -1,0 +1,42 @@
+_BASE_: [
+  '../datasets/voc.yml',
+  '../runtime.yml',
+  './_base_/optimizer_80e.yml',
+  './_base_/ppyoloe_plus_crn.yml',
+  './_base_/ppyoloe_plus_reader.yml',
+]
+
+log_iter: 10
+snapshot_epoch: 1
+epoch: 80
+weights: output/ppyoloe_plus_crn_l_80e_coco/model_final
+
+# pretrain_weights: output/ppyoloe_plus_crn_l_80e_custom/best_model.pdparams
+pretrain_weights: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_l_obj365_pretrained.pdparams
+depth_mult: 1.0
+width_mult: 1.0
+
+
+metric: VOC
+
+# num_classes: 6
+num_classes: 3
+
+TrainDataset:
+  !VOCDataSet
+    dataset_dir: dataset/road_disease_voc/
+    anno_path: train.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+
+EvalDataset:
+  !VOCDataSet
+    dataset_dir: dataset/road_disease_voc/
+    anno_path: test.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+TestDataset:
+  !ImageFolder
+    anno_path: dataset/road_disease_voc/label_list.txt
