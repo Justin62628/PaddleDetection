@@ -1,0 +1,44 @@
+_BASE_: [
+  '../datasets/voc.yml',
+  '../runtime.yml',
+  './_base_/optimizer_80e.yml',
+  './_base_/ppyoloe_crn.yml',
+  './_base_/ppyoloe_reader.yml',
+]
+
+log_iter: 10
+snapshot_epoch: 1
+weights: output/ppyoloe_crn_s_custom/model_final
+
+pretrain_weights: https://paddledet.bj.bcebos.com/models/pretrained/CSPResNetb_s_pretrained.pdparams
+depth_mult: 0.33
+width_mult: 0.50
+
+PPYOLOEHead:
+  static_assigner_epoch: 27
+
+
+metric: VOC
+
+# num_classes: 6
+#num_classes: 3
+num_classes: 4
+
+TrainDataset:
+  !VOCDataSet
+    dataset_dir: dataset/rdd/
+    anno_path: train.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+
+EvalDataset:
+  !VOCDataSet
+    dataset_dir: dataset/rdd/
+    anno_path: test.txt
+    label_list: label_list.txt
+    data_fields: ['image', 'gt_bbox', 'gt_class', 'difficult']
+
+TestDataset:
+  !ImageFolder
+    anno_path: dataset/rdd/label_list.txt

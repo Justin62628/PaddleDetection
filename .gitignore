@@ -25,6 +25,12 @@ __pycache__/
 /lib/
 /lib64/
 /output/
+/dataset/
+/onnx_model/
+/onnx_nms_model/
+/results_trt/
+/results/
+*.whl
 /inference_model/
 /output_inference/
 /output_pruned/
