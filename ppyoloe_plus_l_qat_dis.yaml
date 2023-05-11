@@ -1,0 +1,35 @@
+
+Global:
+  reader_config: configs/ppyoloe/ppyoloe_plus_crn_l_custom_disease.yml
+  include_nms: True
+  Evaluation: True
+  model_dir: output_inference/ppyoloe_plus_crn_l_custom_disease_std_v2
+  model_filename: model.pdmodel
+  params_filename: model.pdiparams
+
+Distillation:
+  alpha: 0.9
+  loss: l2
+
+QuantAware:
+  use_pact: true
+  activation_quantize_type: 'moving_average_abs_max'
+  weight_bits: 8
+  activation_bits: 8
+  for_tensorrt: true
+  quantize_op_types:
+  - conv2d
+  - depthwise_conv2d
+
+TrainConfig:
+  train_iter: 500
+  eval_iter: 100
+  learning_rate:  
+    type: CosineAnnealingDecay
+    learning_rate: 0.00003
+    T_max: 6000
+  optimizer_builder:
+    optimizer: 
+      type: Adam
+    weight_decay: 4.0e-05
+
