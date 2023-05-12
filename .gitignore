@@ -28,8 +28,7 @@ __pycache__/
 /dataset/
 /onnx_model/
 /onnx_nms_model/
-/results_trt/
-/results/
+/results*/
 *.whl
 /inference_model/
 /output_inference/
